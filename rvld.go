@@ -15,7 +15,6 @@ func main() {
 	//fmt.Printf("%v\n", os.Args)
 	file := linker.MustNewFile(os.Args[1])
 
-	if !linker.CheckMagic(file.Contents) {
-		utils.Fatal("Not a ELF file")
-	}
+	inputfile := linker.NewInputFile(file)
+	utils.Assert(len(inputfile.ElfSections) == 11, "wrong section headers.")
 }
