@@ -15,6 +15,19 @@ func main() {
 	//fmt.Printf("%v\n", os.Args)
 	file := linker.MustNewFile(os.Args[1])
 
-	inputfile := linker.NewInputFile(file)
-	utils.Assert(len(inputfile.ElfSections) == 11, "wrong section headers.")
+	objfile := linker.NewObjectFile(file)
+	//utils.Assert(len(inputfile.ElfSections) == 11, "wrong section headers.")
+	objfile.Parse()
+
+	for _, shdr := range objfile.ElfSections {
+		println(linker.ElfGetName(objfile.ShStrTable, shdr.Name))
+	}
+
+	println(objfile.FirstGlobal)
+	println(len(objfile.ElfSyms))
+
+	for _, sym := range objfile.ElfSyms {
+		println(linker.ElfGetName(objfile.SymStrTable, sym.Name))
+	}
+
 }
